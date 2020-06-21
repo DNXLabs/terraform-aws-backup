@@ -5,7 +5,9 @@
 
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12.20 |
 
 ## Providers
 
