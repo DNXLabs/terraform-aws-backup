@@ -3,4 +3,3 @@
 .terraform
 .terraform-plan*
 generated/
-README.md
