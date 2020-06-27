@@ -1,7 +1,7 @@
 # AWS Backup vault
 resource "aws_backup_vault" "backup_vault" {
   # count       = var.enabled && var.vault_name != null ? 1 : 0
-  name = var.vault_name
+  name = "vault-${var.name}"
   # kms_key_arn = var.vault_kms_key_arn
   # tags        = var.tags
 }
@@ -9,10 +9,10 @@ resource "aws_backup_vault" "backup_vault" {
 # AWS Backup plan
 resource "aws_backup_plan" "backup_plan" {
   # count = var.enabled ? 1 : 0
-  name = var.plan_name
+  name = "plan-${var.name}"
 
   rule {
-    rule_name         = var.rule_name
+    name              = "rule-${var.name}"
     target_vault_name = aws_backup_vault.backup_vault.name
     schedule          = var.rule_schedule
     start_window      = var.rule_start_window
@@ -28,7 +28,7 @@ resource "aws_backup_selection" "backup_selection" {
   # count = var.enabled ? length(local.selections) : 0
 
   iam_role_arn = aws_iam_role.backup_role.arn
-  name         = var.selection_name
+  name         = "selection-${var.name}"
   plan_id      = aws_backup_plan.backup_plan.id
 
   selection_tag {
