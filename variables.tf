@@ -86,7 +86,7 @@ variable "selection_tag_key" {
 variable "selection_tag_value" {
   description = "The value in a key-value pair"
   type        = string
-  default     = "false"
+  default     = "true"
 }
 
 # variable "enabled" {

@@ -12,7 +12,7 @@ resource "aws_backup_plan" "backup_plan" {
   name = "plan-${var.name}"
 
   rule {
-    name              = "rule-${var.name}"
+    rule_name         = "rule-${var.name}"
     target_vault_name = aws_backup_vault.backup_vault.name
     schedule          = var.rule_schedule
     start_window      = var.rule_start_window
