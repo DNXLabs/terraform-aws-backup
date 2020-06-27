@@ -23,3 +23,19 @@ resource "aws_backup_plan" "backup_plan" {
     }
   }
 }
+
+resource "aws_backup_selection" "backup_selection" {
+  # count = var.enabled ? length(local.selections) : 0
+
+  iam_role_arn = aws_iam_role.backup_role.arn
+  name         = var.selection_name
+  plan_id      = aws_backup_plan.backup_plan.id
+
+  selection_tag {
+    type  = var.selection_tag_type
+    key   = var.selection_tag_key
+    value = var.selection_tag_value
+  }
+
+  depends_on = [aws_iam_role_policy_attachment.backup_policy_attach]
+}
