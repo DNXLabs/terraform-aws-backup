@@ -31,6 +31,7 @@
 | selection\_tag\_key | The key in a key-value pair | `string` | `"Backup"` | no |
 | selection\_tag\_type | An operation, such as StringEquals, that is applied to a key-value pair used to filter resources in a selection | `string` | `"STRINGEQUALS"` | no |
 | selection\_tag\_value | The value in a key-value pair | `string` | `"true"` | no |
+| vault\_kms\_key\_arn | The server-side encryption key that is used to protect your backups | `string` | `null` | no |
 
 ## Outputs
 
