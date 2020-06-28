@@ -1,15 +1,18 @@
 # AWS Backup vault
 resource "aws_backup_vault" "backup_vault" {
-  # count       = var.enabled && var.vault_name != null ? 1 : 0
   name = "vault-${var.name}-backup"
-  # kms_key_arn = var.vault_kms_key_arn
-  # tags        = var.tags
+  kms_key_arn = var.vault_kms_key_arn
+  tags        = {
+    "Job" = "${var.name}-backup"
+  }
 }
 
 # AWS Backup plan
 resource "aws_backup_plan" "backup_plan" {
-  # count = var.enabled ? 1 : 0
   name = "plan-${var.name}-backup"
+  tags        = {
+    "Job" = "${var.name}-backup"
+  }
 
   rule {
     rule_name         = "rule-${var.name}-backup"
@@ -21,11 +24,13 @@ resource "aws_backup_plan" "backup_plan" {
       cold_storage_after = var.rule_lifecycle_cold_storage_after
       delete_after       = var.rule_lifecycle_delete_after
     }
+    recovery_point_tags = {
+      "Job" = "${var.name}-backup"
+    }
   }
 }
 
 resource "aws_backup_selection" "backup_selection" {
-  # count = var.enabled ? length(local.selections) : 0
 
   iam_role_arn = aws_iam_role.backup_role.arn
   name         = "selection-${var.name}-backup"

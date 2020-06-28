@@ -7,17 +7,11 @@ variable "name" {
   default     = null
 }
 
-# variable "vault_kms_key_arn" {
-#   description = "The server-side encryption key that is used to protect your backups"
-#   type        = string
-#   default     = null
-# }
-
-# variable "tags" {
-#   description = "A mapping of tags to assign to the resource"
-#   type        = map(string)
-#   default     = {}
-# }
+variable "vault_kms_key_arn" {
+  description = "The server-side encryption key that is used to protect your backups"
+  type        = string
+  default     = null
+}
 
 # Default rule
 variable "rule_schedule" {
@@ -38,12 +32,6 @@ variable "rule_completion_window" {
   default     = 120
 }
 
-# variable "rule_recovery_point_tags" {
-#   description = "Metadata that you can assign to help organize the resources that you create"
-#   type        = map(string)
-#   default     = {}
-# }
-
 # Rule lifecycle
 variable "rule_lifecycle_cold_storage_after" {
   description = "Specifies the number of days after creation that a recovery point is moved to cold storage"
@@ -56,13 +44,6 @@ variable "rule_lifecycle_delete_after" {
   type        = number
   default     = 120
 }
-
-# Rules
-# variable "rules" {
-#   description = "A list of rule maps"
-#   type        = any
-#   default     = []
-# }
 
 # Selection
 variable "selection_resources" {
@@ -88,9 +69,3 @@ variable "selection_tag_value" {
   type        = string
   default     = "true"
 }
-
-# variable "enabled" {
-#   description = "Change to false to avoid deploying any AWS Backup resources"
-#   type        = bool
-#   default     = true
-# }
