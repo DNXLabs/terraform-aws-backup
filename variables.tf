@@ -4,7 +4,7 @@
 variable "name" {
   description = "Name of the backup vault to create."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "vault_kms_key_arn" {
