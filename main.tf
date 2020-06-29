@@ -1,17 +1,17 @@
 # AWS Backup vault
 resource "aws_backup_vault" "backup_vault" {
-  name = "vault-${var.name}-backup"
+  name        = "vault-${var.name}-backup"
   kms_key_arn = var.vault_kms_key_arn
-  tags        = {
-    "Job" = "${var.name}-backup"
+  tags = {
+    Job = "${var.name}-backup"
   }
 }
 
 # AWS Backup plan
 resource "aws_backup_plan" "backup_plan" {
   name = "plan-${var.name}-backup"
-  tags        = {
-    "Job" = "${var.name}-backup"
+  tags = {
+    Job = "${var.name}-backup"
   }
 
   rule {
@@ -25,7 +25,7 @@ resource "aws_backup_plan" "backup_plan" {
       delete_after       = var.rule_lifecycle_delete_after
     }
     recovery_point_tags = {
-      "Job" = "${var.name}-backup"
+      Job = "${var.name}-backup"
     }
   }
 }
