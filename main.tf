@@ -30,10 +30,10 @@ resource "aws_backup_plan" "backup_plan" {
   }
 }
 
+# AWS Backup selection - tag
 resource "aws_backup_selection" "backup_selection" {
-
-  iam_role_arn = aws_iam_role.backup_role.arn
   name         = "selection-${var.name}-backup"
+  iam_role_arn = aws_iam_role.backup_role.arn
   plan_id      = aws_backup_plan.backup_plan.id
 
   selection_tag {
