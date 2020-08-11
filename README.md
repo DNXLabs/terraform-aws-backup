@@ -17,6 +17,9 @@ In addition you have the option to specifies:
  - The amount of time in minutes before beginning a backup
  - A cron specifying when AWS Backup initiates a backup job
 
+
+ More Information: https://dnxlabs.slab.com/public/2ma7w7bc
+
 [![Lint Status](https://github.com/DNXLabs/terraform-aws-backup/workflows/Lint/badge.svg)](https://github.com/DNXLabs/terraform-aws-backup/actions)
 [![LICENSE](https://img.shields.io/github/license/DNXLabs/terraform-aws-backup)](https://github.com/DNXLabs/terraform-aws-backup/blob/master/LICENSE)
 
