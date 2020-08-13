@@ -1,13 +1,14 @@
 # terraform-aws-backup
 
-Terraform-aws-backup is a module created to automate the backup of data across AWS services using a resource tag. 
+[![Lint Status](https://github.com/DNXLabs/terraform-aws-backup/workflows/Lint/badge.svg)](https://github.com/DNXLabs/terraform-aws-backup/actions)
+[![LICENSE](https://img.shields.io/github/license/DNXLabs/terraform-aws-backup)](https://github.com/DNXLabs/terraform-aws-backup/blob/master/LICENSE)
 
-This module requires:
- * Terraform Version >=0.12.20
+This terraform module automate the backup of data across AWS services using a resource tag.
+
 
 This modules creates the following resources:
 
- - An Identity and Access Management (IAM) that Provides AWS Backup permissions to create backups of all supported resource types on your behalf. 
+ - An Identity and Access Management (IAM) that Provides AWS Backup permissions to create backups of all supported resource types on your behalf.
 
 In addition you have the option to specifies:
 
@@ -17,11 +18,6 @@ In addition you have the option to specifies:
  - The amount of time in minutes before beginning a backup
  - A cron specifying when AWS Backup initiates a backup job
 
-
- More Information: https://dnxlabs.slab.com/public/2ma7w7bc
-
-[![Lint Status](https://github.com/DNXLabs/terraform-aws-backup/workflows/Lint/badge.svg)](https://github.com/DNXLabs/terraform-aws-backup/actions)
-[![LICENSE](https://img.shields.io/github/license/DNXLabs/terraform-aws-backup)](https://github.com/DNXLabs/terraform-aws-backup/blob/master/LICENSE)
 
 <!--- BEGIN_TF_DOCS --->
 
