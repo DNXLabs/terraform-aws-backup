@@ -5,8 +5,7 @@
 
 This terraform module automate the backup of data across AWS services using a resource tag.
 
-
-This modules creates the following resources:
+The following resources will be created:
 
  - An Identity and Access Management (IAM) that Provides AWS Backup permissions to create backups of all supported resource types on your behalf.
 
@@ -17,7 +16,6 @@ In addition you have the option to specifies:
  - The number of days after creation that a recovery point is deleted. Must be 90 days greater than cold storage
  - The amount of time in minutes before beginning a backup
  - A cron specifying when AWS Backup initiates a backup job
-
 
 <!--- BEGIN_TF_DOCS --->
 
