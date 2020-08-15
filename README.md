@@ -3,6 +3,20 @@
 [![Lint Status](https://github.com/DNXLabs/terraform-aws-backup/workflows/Lint/badge.svg)](https://github.com/DNXLabs/terraform-aws-backup/actions)
 [![LICENSE](https://img.shields.io/github/license/DNXLabs/terraform-aws-backup)](https://github.com/DNXLabs/terraform-aws-backup/blob/master/LICENSE)
 
+This terraform module automate the backup of data across AWS services using a resource tag.
+
+The following resources will be created:
+
+ - An Identity and Access Management (IAM) that Provides AWS Backup permissions to create backups of all supported resource types on your behalf.
+
+In addition you have the option to specifies:
+
+ - The amount of time AWS Backup attempts a backup before canceling the job and returning an error
+ - The number of days after creation that a recovery point is moved to cold storage
+ - The number of days after creation that a recovery point is deleted. Must be 90 days greater than cold storage
+ - The amount of time in minutes before beginning a backup
+ - A cron specifying when AWS Backup initiates a backup job
+
 <!--- BEGIN_TF_DOCS --->
 
 ## Requirements
