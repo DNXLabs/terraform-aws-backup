@@ -6,16 +6,19 @@
 This terraform module automate the backup of data across AWS services using a resource tag.
 
 The following resources will be created:
-
  - An Identity and Access Management (IAM) that Provides AWS Backup permissions to create backups of all supported resource types on your behalf.
-
-In addition you have the option to specifies:
-
- - The amount of time AWS Backup attempts a backup before canceling the job and returning an error
- - The number of days after creation that a recovery point is moved to cold storage
- - The number of days after creation that a recovery point is deleted. Must be 90 days greater than cold storage
- - The amount of time in minutes before beginning a backup
- - A cron specifying when AWS Backup initiates a backup job
+ - AWS Backup - It is a fully managed backup service that makes it easy to centralize and automate the backup of data across AWS services
+ - AWS Vault - Backup vaults are containers where your backups are stored. You can have one default vault, or multiple vaults to backup to.
+ - AWS Backup plan - Backup rules specify the backup schedule, backup window, and lifecycle rules.
+     - The amount of time AWS Backup attempts a backup before canceling the job and returning an error
+        - The default value is 120
+     - The number of days after creation that a recovery point is moved to cold storage
+        - The default value is 30
+     - The number of days after creation that a recovery point is deleted. Must be 90 days greater than cold storage
+        - The default value is 120
+     - The amount of time in minutes before beginning a backup
+        - The default value is 60
+     - A cron specifying when AWS Backup initiates a backup job
 
 <!--- BEGIN_TF_DOCS --->
 
