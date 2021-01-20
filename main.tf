@@ -36,10 +36,14 @@ resource "aws_backup_selection" "backup_selection" {
   iam_role_arn = aws_iam_role.backup_role.arn
   plan_id      = aws_backup_plan.backup_plan.id
 
-  selection_tag {
-    type  = var.selection_tag_type
-    key   = var.selection_tag_key
-    value = var.selection_tag_value
+  dynamic "selection_tag" {
+    for_each = var.selection_tag
+    
+    content {
+      type  = selection_tag.value.type
+      key   = selection_tag.value.key
+      value = selection_tag.value.value
+    }
   }
 
   depends_on = [aws_iam_role_policy_attachment.backup_policy_attach]

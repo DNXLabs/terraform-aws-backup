@@ -52,20 +52,18 @@ variable "selection_resources" {
   default     = []
 }
 
-variable "selection_tag_type" {
-  description = "An operation, such as StringEquals, that is applied to a key-value pair used to filter resources in a selection"
-  type        = string
-  default     = "STRINGEQUALS"
-}
-
-variable "selection_tag_key" {
-  description = "The key in a key-value pair"
-  type        = string
-  default     = "Backup"
-}
-
-variable "selection_tag_value" {
-  description = "The value in a key-value pair"
-  type        = string
-  default     = "true"
+variable "selection_tag" {
+  description = "Tag-based conditions used to specify a set of resources to assign to a backup plan"
+  type = list(object({
+    type  = string
+    key   = string
+    value = string
+  }))
+  default = [
+    {
+      type  = "STRINGEQUALS"
+      key   = "Backup"
+      value = "true"      
+    }
+  ]
 }
