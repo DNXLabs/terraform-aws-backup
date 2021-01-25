@@ -1,6 +1,12 @@
 #
 # AWS Backup vault
 #
+variable "create_iam" {
+  description = "if it is true will create iam"
+  type        = bool
+  default     = "false"
+}
+
 variable "name" {
   description = "Name of the backup vault to create."
   type        = string

@@ -1,4 +1,5 @@
 resource "aws_iam_role" "backup_role" {
+  count = var.create_iam ? 1 : 0
   name               = "aws-backup-role"
   assume_role_policy = <<POLICY
 {
@@ -17,6 +18,7 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "backup_policy_attach" {
+  count = var.create_iam ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
-  role       = aws_iam_role.backup_role.name
+  role       = aws_iam_role.backup_role[count.index].name
 }
