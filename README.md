@@ -38,14 +38,14 @@ The following resources will be created:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| create\_iam | if it is true will create iam | `bool` | `"false"` | no |
+| create\_iam | Specifies if the IAM Role need to be created. For Multi Region deployments, IAM role need to be created only on primary region | `bool` | `"false"` | no |
 | name | Name of the backup vault to create. | `string` | `""` | no |
 | rule\_completion\_window | The amount of time AWS Backup attempts a backup before canceling the job and returning an error | `number` | `120` | no |
 | rule\_lifecycle\_cold\_storage\_after | Specifies the number of days after creation that a recovery point is moved to cold storage | `number` | `30` | no |
 | rule\_lifecycle\_delete\_after | Specifies the number of days after creation that a recovery point is deleted. Must be 90 days greater than `cold_storage_after` | `number` | `120` | no |
 | rule\_schedule | A CRON expression specifying when AWS Backup initiates a backup job | `string` | `null` | no |
 | rule\_start\_window | The amount of time in minutes before beginning a backup | `number` | `60` | no |
-| selection\_resources | An array of strings that either contain Amazon Resource Names (ARNs) or match patterns of resources to assign to a backup plan | `list` | `[]` | no |
+| selection\_resources | An array of strings that either contain Amazon Resource Names (ARNs) or match patterns of resources to assign to a backup plan | `list(any)` | `[]` | no |
 | selection\_tag\_key | The key in a key-value pair | `string` | `"Backup"` | no |
 | selection\_tag\_type | An operation, such as StringEquals, that is applied to a key-value pair used to filter resources in a selection | `string` | `"STRINGEQUALS"` | no |
 | selection\_tag\_value | The value in a key-value pair | `string` | `"true"` | no |
