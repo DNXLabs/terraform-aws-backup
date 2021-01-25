@@ -2,7 +2,7 @@
 # AWS Backup vault
 #
 variable "create_iam" {
-  description = "if it is true will create iam"
+  description = "Specifies if the IAM Role need to be created. For Multi Region deployments, IAM role need to be created only on primary region"
   type        = bool
   default     = "false"
 }
@@ -54,7 +54,7 @@ variable "rule_lifecycle_delete_after" {
 # Selection
 variable "selection_resources" {
   description = "An array of strings that either contain Amazon Resource Names (ARNs) or match patterns of resources to assign to a backup plan"
-  type        = list
+  type        = list(any)
   default     = []
 }
 
