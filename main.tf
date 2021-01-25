@@ -32,16 +32,12 @@ resource "aws_backup_plan" "backup_plan" {
 }
 
 
-# data "aws_iam_role" "backup_role" {
-#   name  = "aws-backup-role"
-# }
-
 # AWS Backup selection - tag
 resource "aws_backup_selection" "backup_selection" {
   name         = "selection-${var.name}-backup"
   iam_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-backup-role"
 
-  plan_id      = aws_backup_plan.backup_plan.id
+  plan_id = aws_backup_plan.backup_plan.id
 
   selection_tag {
     type  = var.selection_tag_type
