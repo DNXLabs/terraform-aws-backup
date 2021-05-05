@@ -7,7 +7,6 @@ resource "aws_backup_vault" "backup_vault" {
   }
 }
 
-
 # AWS Backup plan
 resource "aws_backup_plan" "backup_plan" {
   name = "plan-${var.name}-backup"
@@ -35,7 +34,7 @@ resource "aws_backup_plan" "backup_plan" {
 # AWS Backup selection - tag
 resource "aws_backup_selection" "backup_selection" {
   name         = "selection-${var.name}-backup"
-  iam_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-backup-role"
+  iam_role_arn = aws_iam_role.backup_role.arn
 
   plan_id = aws_backup_plan.backup_plan.id
 
@@ -44,8 +43,6 @@ resource "aws_backup_selection" "backup_selection" {
     key   = var.selection_tag_key
     value = var.selection_tag_value
   }
-
-  #depends_on = [aws_iam_role_policy_attachment.backup_policy_attach]
 }
 
 

@@ -1,12 +1,6 @@
 #
 # AWS Backup vault
 #
-variable "create_iam" {
-  description = "Specifies if the IAM Role need to be created. For Multi Region deployments, IAM role need to be created only on primary region"
-  type        = bool
-  default     = "false"
-}
-
 variable "name" {
   description = "Name of the backup vault to create."
   type        = string
