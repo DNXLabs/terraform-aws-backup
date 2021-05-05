@@ -38,7 +38,6 @@ The following resources will be created:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| create\_iam | Specifies if the IAM Role need to be created. For Multi Region deployments, IAM role need to be created only on primary region | `bool` | `"false"` | no |
 | name | Name of the backup vault to create. | `string` | `""` | no |
 | rule\_completion\_window | The amount of time AWS Backup attempts a backup before canceling the job and returning an error | `number` | `120` | no |
 | rule\_lifecycle\_cold\_storage\_after | Specifies the number of days after creation that a recovery point is moved to cold storage | `number` | `30` | no |
