@@ -1,5 +1,5 @@
 resource "aws_iam_role" "backup_role" {
-  name_prefix       = "aws-backup-"
+  name_prefix        = "aws-backup-"
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
