@@ -43,6 +43,8 @@ resource "aws_backup_selection" "backup_selection" {
     key   = var.selection_tag_key
     value = var.selection_tag_value
   }
+  
+  condition {}
 }
 
 
