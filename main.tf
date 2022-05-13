@@ -15,17 +15,26 @@ resource "aws_backup_plan" "backup_plan" {
   }
 
   rule {
-    rule_name         = "rule-${var.name}-backup"
-    target_vault_name = aws_backup_vault.backup_vault.name
-    schedule          = var.rule_schedule
-    start_window      = var.rule_start_window
-    completion_window = var.rule_completion_window
+    rule_name                = "rule-${var.name}-backup"
+    target_vault_name        = aws_backup_vault.backup_vault.name
+    schedule                 = var.rule_schedule
+    start_window             = var.rule_start_window
+    completion_window        = var.rule_completion_window
+
     lifecycle {
       cold_storage_after = var.rule_lifecycle_cold_storage_after
       delete_after       = var.rule_lifecycle_delete_after
     }
     recovery_point_tags = {
       Job = "${var.name}-backup"
+    }
+
+    copy_action {
+      destination_vault_arn = var.rule_copy_action_destination_vault_arn
+      lifecycle {
+        cold_storage_after = var.rule_lifecycle_cold_storage_after
+        delete_after       = var.rule_lifecycle_delete_after
+      }
     }
   }
 }
