@@ -40,6 +40,7 @@ The following resources will be created:
 |------|-------------|------|---------|:--------:|
 | name | Name of the backup vault to create. | `string` | `""` | no |
 | rule\_completion\_window | The amount of time AWS Backup attempts a backup before canceling the job and returning an error | `number` | `120` | no |
+| rule\_copy\_action\_destination\_vault\_arn | An Amazon Resource Name (ARN) that uniquely identifies the destination backup vault for the copied backup | `string` | `null` | no |
 | rule\_lifecycle\_cold\_storage\_after | Specifies the number of days after creation that a recovery point is moved to cold storage | `number` | `30` | no |
 | rule\_lifecycle\_delete\_after | Specifies the number of days after creation that a recovery point is deleted. Must be 90 days greater than `cold_storage_after` | `number` | `120` | no |
 | rule\_schedule | A CRON expression specifying when AWS Backup initiates a backup job | `string` | `null` | no |
@@ -49,6 +50,7 @@ The following resources will be created:
 | selection\_tag\_type | An operation, such as StringEquals, that is applied to a key-value pair used to filter resources in a selection | `string` | `"STRINGEQUALS"` | no |
 | selection\_tag\_value | The value in a key-value pair | `string` | `"true"` | no |
 | vault\_kms\_key\_arn | The server-side encryption key that is used to protect your backups | `string` | `null` | no |
+| vault\_policy | The backup vault access policy document in JSON format. | `string` | `""` | no |
 
 ## Outputs
 
