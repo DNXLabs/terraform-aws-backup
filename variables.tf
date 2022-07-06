@@ -14,9 +14,21 @@ variable "vault_kms_key_arn" {
 }
 
 variable "vault_policy" {
-  description = "The backup vault access policy document in JSON format."
+  description = "The backup vault access policy document in JSON format"
   type        = string
   default     = ""
+}
+
+variable "vault_notification_sns_topic_arn" {
+  description = "he Amazon Resource Name (ARN) that specifies the topic for a backup vaults events"
+  type        = string
+  default     = ""
+}
+
+variable "backup_vault_events" {
+  description = "An array of events that indicate the status of jobs to back up resources to the backup vault"
+  type        = list(any)
+  default     = ["BACKUP_JOB_FAILED", "COPY_JOB_FAILED"]
 }
 
 # Default rule
