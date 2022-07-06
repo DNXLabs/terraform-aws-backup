@@ -13,6 +13,12 @@ variable "vault_kms_key_arn" {
   default     = null
 }
 
+variable "vault_policy" {
+  description = "The backup vault access policy document in JSON format."
+  type        = string
+  default     = ""
+}
+
 # Default rule
 variable "rule_schedule" {
   description = "A CRON expression specifying when AWS Backup initiates a backup job"
@@ -43,6 +49,12 @@ variable "rule_lifecycle_delete_after" {
   description = "Specifies the number of days after creation that a recovery point is deleted. Must be 90 days greater than `cold_storage_after`"
   type        = number
   default     = 120
+}
+
+variable "rule_copy_action_destination_vault" {
+  description = "Configuration block(s) with copy operation settings"
+  type        = map(any)
+  default     = {}
 }
 
 # Selection
