@@ -40,7 +40,7 @@ The following resources will be created:
 |------|-------------|------|---------|:--------:|
 | name | Name of the backup vault to create. | `string` | `""` | no |
 | rule\_completion\_window | The amount of time AWS Backup attempts a backup before canceling the job and returning an error | `number` | `120` | no |
-| rule\_copy\_action\_destination\_vault\_arn | An Amazon Resource Name (ARN) that uniquely identifies the destination backup vault for the copied backup | `string` | `null` | no |
+| rule\_copy\_action\_destination\_vault | Configuration block(s) with copy operation settings | `map(any)` | `{}` | no |
 | rule\_lifecycle\_cold\_storage\_after | Specifies the number of days after creation that a recovery point is moved to cold storage | `number` | `30` | no |
 | rule\_lifecycle\_delete\_after | Specifies the number of days after creation that a recovery point is deleted. Must be 90 days greater than `cold_storage_after` | `number` | `120` | no |
 | rule\_schedule | A CRON expression specifying when AWS Backup initiates a backup job | `string` | `null` | no |
