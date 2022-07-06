@@ -7,6 +7,12 @@ resource "aws_backup_vault" "backup_vault" {
   }
 }
 
+resource "aws_backup_vault_policy" "backup_vault" {
+  count             = var.vault_policy != "" ? 1 : 0
+  backup_vault_name = aws_backup_vault.backup_vault.name
+  policy            = var.vault_policy
+}
+
 # AWS Backup plan
 resource "aws_backup_plan" "backup_plan" {
   name = "plan-${var.name}-backup"
@@ -15,11 +21,11 @@ resource "aws_backup_plan" "backup_plan" {
   }
 
   rule {
-    rule_name                = "rule-${var.name}-backup"
-    target_vault_name        = aws_backup_vault.backup_vault.name
-    schedule                 = var.rule_schedule
-    start_window             = var.rule_start_window
-    completion_window        = var.rule_completion_window
+    rule_name         = "rule-${var.name}-backup"
+    target_vault_name = aws_backup_vault.backup_vault.name
+    schedule          = var.rule_schedule
+    start_window      = var.rule_start_window
+    completion_window = var.rule_completion_window
 
     lifecycle {
       cold_storage_after = var.rule_lifecycle_cold_storage_after
@@ -52,7 +58,7 @@ resource "aws_backup_selection" "backup_selection" {
     key   = var.selection_tag_key
     value = var.selection_tag_value
   }
-  
+
   condition {}
 }
 

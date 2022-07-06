@@ -13,6 +13,12 @@ variable "vault_kms_key_arn" {
   default     = null
 }
 
+variable "vault_policy" {
+  description = "The backup vault access policy document in JSON format."
+  type        = string
+  default     = ""
+}
+
 # Default rule
 variable "rule_schedule" {
   description = "A CRON expression specifying when AWS Backup initiates a backup job"
