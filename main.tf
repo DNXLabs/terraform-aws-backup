@@ -35,11 +35,14 @@ resource "aws_backup_plan" "backup_plan" {
       Job = "${var.name}-backup"
     }
 
-    copy_action {
-      destination_vault_arn = var.rule_copy_action_destination_vault_arn
-      lifecycle {
-        cold_storage_after = var.rule_lifecycle_cold_storage_after
-        delete_after       = var.rule_lifecycle_delete_after
+    dynamic "copy_action" {
+      for_each = var.rule_copy_action_destination_vault
+      content {
+        destination_vault_arn = copy_action.value.destination_vault_arn
+        lifecycle {
+          cold_storage_after = copy_action.value.cold_storage_after
+          delete_after       = copy_action.value.delete_after
+        }
       }
     }
   }

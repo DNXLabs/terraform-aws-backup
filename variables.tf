@@ -51,10 +51,10 @@ variable "rule_lifecycle_delete_after" {
   default     = 120
 }
 
-variable "rule_copy_action_destination_vault_arn" {
-  description = "An Amazon Resource Name (ARN) that uniquely identifies the destination backup vault for the copied backup"
-  type        = string
-  default     = null
+variable "rule_copy_action_destination_vault" {
+  description = "Configuration block(s) with copy operation settings"
+  type        = map(any)
+  default     = {}
 }
 
 # Selection
