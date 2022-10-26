@@ -41,7 +41,7 @@ The following resources will be created:
 | backup\_vault\_events | An array of events that indicate the status of jobs to back up resources to the backup vault | `list(any)` | <pre>[<br>  "BACKUP_JOB_FAILED",<br>  "COPY_JOB_FAILED"<br>]</pre> | no |
 | name | Name of the backup vault to create. | `string` | `""` | no |
 | rule\_completion\_window | The amount of time AWS Backup attempts a backup before canceling the job and returning an error | `number` | `120` | no |
-| rule\_copy\_action\_destination\_vault | Configuration block(s) with copy operation settings | `map(any)` | `{}` | no |
+| rule\_copy\_action\_destination\_vault | Configuration block(s) with copy operation settings | `map` | `{}` | no |
 | rule\_lifecycle\_cold\_storage\_after | Specifies the number of days after creation that a recovery point is moved to cold storage | `number` | `30` | no |
 | rule\_lifecycle\_delete\_after | Specifies the number of days after creation that a recovery point is deleted. Must be 90 days greater than `cold_storage_after` | `number` | `120` | no |
 | rule\_schedule | A CRON expression specifying when AWS Backup initiates a backup job | `string` | `null` | no |
