@@ -24,9 +24,7 @@ The following resources will be created:
 
 ## Requirements
 
-| Name | Version |
-|------|---------|
-| terraform | >= 0.12.0 |
+No requirements.
 
 ## Providers
 
