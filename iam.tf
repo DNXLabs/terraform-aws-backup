@@ -1,4 +1,6 @@
 resource "aws_iam_role" "backup_role" {
+  count = var.account_type == local.account_type.workload ? 1 : 0
+
   name_prefix        = "aws-backup-"
   assume_role_policy = <<POLICY
 {
@@ -17,6 +19,8 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "backup_policy_attach" {
+  count = var.account_type == local.account_type.workload ? 1 : 0
+
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
-  role       = aws_iam_role.backup_role.name
+  role       = aws_iam_role.backup_role[0].name
 }
