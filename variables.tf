@@ -111,7 +111,6 @@ variable "rule_lifecycle_delete_after" {
 
 variable "rule_copy_action_destination_vault" {
   description = "Configuration block(s) with copy operation settings"
-  type        = map(any)
   default     = {}
 }
 
