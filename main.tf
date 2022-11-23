@@ -64,9 +64,10 @@ resource "aws_backup_selection" "backup_selection" {
 
   name         = "selection-${var.name}-backup"
   iam_role_arn = aws_iam_role.backup_role[0].arn
-
   plan_id = aws_backup_plan.backup_plan[0].id
 
+  resources = [var.resources]
+  
   selection_tag {
     type  = var.selection_tag_type
     key   = var.selection_tag_key
@@ -82,4 +83,16 @@ resource "aws_backup_vault_notifications" "default" {
   backup_vault_name   = aws_backup_vault.backup_vault.name
   sns_topic_arn       = var.vault_notification_sns_topic_arn
   backup_vault_events = var.backup_vault_events
+}
+
+# AWS Backup selection - selection resources
+resource "aws_backup_selection" "backup_selection_resources" {
+  count = var.account_type == local.account_type.workload ? 1 : 0
+
+  name         = "resources-${var.name}-backup"
+  iam_role_arn = aws_iam_role.backup_role[0].arn
+  plan_id      = aws_backup_plan.backup_plan[0].id
+  resources    = var.selection_resources
+
+  condition {}
 }
