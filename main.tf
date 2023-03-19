@@ -30,39 +30,40 @@ resource "aws_backup_plan" "backup_plan" {
     Job = "${var.name}-backup"
   }
 
-  rule {
-    rule_name         = "rule-${var.name}-backup"
-    target_vault_name = aws_backup_vault.backup_vault.name
-    schedule          = var.rule_schedule
-    start_window      = var.rule_start_window
-    completion_window = var.rule_completion_window
+    dynamic "rule" {
+        for_each  = var.roles
+        content {
+          rule_name                       = "rule-${rule.value.name}-backup"
+          target_vault_name               = aws_backup_vault.backup_vault[0].name
+          schedule                        = try(rule.value.schedule, null)
+          start_window                    = try(rule.value.start_window, null)
+          enable_continuous_backup        = try(rule.value.enable_continuous_backup, null)
+          completion_window               = try(rule.value.completion_window, null)
+          lifecycle {
+              cold_storage_after          = try(rule.value.lifecycle_cold_storage_after, null)
+              delete_after                = try(rule.value.lifecycle_delete_after, null)
+          }
 
-    lifecycle {
-      cold_storage_after = var.rule_lifecycle_cold_storage_after
-      delete_after       = var.rule_lifecycle_delete_after
-    }
-    recovery_point_tags = {
-      Job = "${var.name}-backup"
-    }
+          copy_action {
+            destination_vault_arn = try(rule.value.destination_vault_arn, null)
+            lifecycle {
+              cold_storage_after = try(rule.value.cold_storage_after, null)
+              delete_after       = try(rule.value.delete_after, null)
+            }
 
-    dynamic "copy_action" {
-      for_each = var.rule_copy_action_destination_vault
-      content {
-        destination_vault_arn = copy_action.value.destination_vault_arn
-        lifecycle {
-          cold_storage_after = copy_action.value.cold_storage_after
-          delete_after       = copy_action.value.delete_after
+          }
+          recovery_point_tags = {
+              Job = "${rule.value.name}-backup"
+          }
         }
-      }
     }
-  }
 }
 
 # AWS Backup selection - tag
-resource "aws_backup_selection" "backup_selection" {
-  count = var.account_type == local.account_type.workload ? 1 : 0
+resource "aws_backup_selection" "tag" {
+  count = length(var.selection_resources) == 0 && var.account_type == local.account_type.workload ? 1 : 0
 
-  name         = "selection-${var.name}-backup"
+  name         = "selection-${var.name}-backup-tag"
   iam_role_arn = aws_iam_role.backup_role[0].arn
 
   plan_id = aws_backup_plan.backup_plan[0].id
@@ -74,6 +75,15 @@ resource "aws_backup_selection" "backup_selection" {
   }
 
   condition {}
+}
+
+# AWS Backup selection - resources arn
+resource "aws_backup_selection" "resources" {
+  count         = length(var.selection_resources) > 0 && var.account_type == local.account_type.workload ? length(var.selection_resources) : 0 
+  name          = "selection-${var.identifier}-backup-${cont.index}"
+  iam_role_arn  = aws_iam_role.backup_role[0].arn
+  plan_id       = aws_backup_plan.backup_plan[0].id
+  resources     = var.selection_resources
 }
 
 # AWS Backup vault notification
