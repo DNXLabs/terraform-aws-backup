@@ -153,6 +153,6 @@ variable "changeable_for_days" {
 }
 
 variable "roles" {
-  type        = list(any)
-  default     = []
+  type    = list(any)
+  default = []
 }
