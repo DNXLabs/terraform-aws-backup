@@ -77,13 +77,14 @@ resource "aws_backup_selection" "tag" {
   condition {}
 }
 
+
 # AWS Backup selection - resources arn
 resource "aws_backup_selection" "resources" {
   count         = length(var.selection_resources) > 0 && var.account_type == local.account_type.workload ? length(var.selection_resources) : 0 
-  name          = "selection-${var.identifier}-backup-${cont.index}"
+  name          = "selection-${element(split(":", var.selection_resources[count.index]), length(var.selection_resources[count.index]) -1)}-backup-${count.index}"
   iam_role_arn  = aws_iam_role.backup_role[0].arn
   plan_id       = aws_backup_plan.backup_plan[0].id
-  resources     = var.selection_resources
+  resources     = var.selection_resources[count.index]
 }
 
 # AWS Backup vault notification
