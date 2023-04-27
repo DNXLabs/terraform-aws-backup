@@ -31,34 +31,33 @@ resource "aws_backup_plan" "backup_plan" {
   }
 
   dynamic "rule" {
-    for_each = var.roles
+    for_each = var.rule
     content {
-      rule_name                = "rule-${rule.value.name}-backup"
-      target_vault_name        = aws_backup_vault.backup_vault[0].name
+      rule_name                = "rule-${var.name}-backup"
+      target_vault_name        = aws_backup_vault.backup_vault.name
       schedule                 = try(rule.value.schedule, null)
       start_window             = try(rule.value.start_window, null)
       enable_continuous_backup = try(rule.value.enable_continuous_backup, null)
       completion_window        = try(rule.value.completion_window, null)
       lifecycle {
-        cold_storage_after = try(rule.value.lifecycle_cold_storage_after, null)
-        delete_after       = try(rule.value.lifecycle_delete_after, null)
+        cold_storage_after = try(rule.value.lifecycle.cold_storage_after, null)
+        delete_after       = try(rule.value.lifecycle.delete_after, null)
       }
 
       copy_action {
-        destination_vault_arn = try(rule.value.destination_vault_arn, null)
+        destination_vault_arn = aws_backup_vault.backup_vault.arn
         lifecycle {
-          cold_storage_after = try(rule.value.cold_storage_after, null)
-          delete_after       = try(rule.value.delete_after, null)
+          cold_storage_after = try(rule.value.lifecycle.cold_storage_after, null)
+          delete_after       = try(rule.value.lifecycle.delete_after, null)
         }
-
       }
+
       recovery_point_tags = {
-        Job = "${rule.value.name}-backup"
+        Job = "rule-${var.name}-backup"
       }
     }
   }
 }
-
 # AWS Backup selection - tag
 resource "aws_backup_selection" "tag" {
   count = length(var.selection_resources) == 0 && var.account_type == local.account_type.workload ? 1 : 0

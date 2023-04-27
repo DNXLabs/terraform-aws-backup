@@ -152,7 +152,34 @@ variable "changeable_for_days" {
   default     = null
 }
 
-variable "roles" {
-  type    = list(any)
-  default = []
+variable "rule" {
+  description = "List of backup rules"
+type = list(object({
+    rule_name                    = string
+    target_vault_name            = string
+    schedule                     = string
+    start_window                 = number
+    completion_window            = number
+    enable_continuous_backup    = bool
+    lifecycle_cold_storage_after = number
+    lifecycle_delete_after       = number
+    lifecycle                    = object({
+      cold_storage_after = number
+      delete_after       = number
+    })
+  }))
+  default = [{
+    rule_name         = "backup-rule"
+    target_vault_name = "backup-vault"
+    schedule          = null
+    start_window      = 60
+    completion_window = 120
+    enable_continuous_backup = true
+    lifecycle_cold_storage_after = 30
+    lifecycle_delete_after = 120
+    lifecycle = {
+      cold_storage_after = 30
+      delete_after       = 120
+    }
+  }]
 }
