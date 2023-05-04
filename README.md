@@ -40,15 +40,11 @@ No requirements.
 | backup\_vault\_events | An array of events that indicate the status of jobs to back up resources to the backup vault | `list(string)` | <pre>[<br>  "BACKUP_JOB_FAILED",<br>  "COPY_JOB_FAILED"<br>]</pre> | no |
 | changeable\_for\_days | The number of days before the lock date. Until that time, the configuration can be edited or removed. The minimum number of day is 3 days | `number` | `null` | no |
 | enable\_aws\_backup\_vault\_notifications | Enable vault notifications | `bool` | `false` | no |
+| enabled | Change to false to avoid deploying any AWS Backup resources | `bool` | `true` | no |
 | max\_retention\_days | The maximum retention period that the vault retains its recovery points | `number` | `null` | no |
 | min\_retention\_days | The minimum retention period that the vault retains its recovery points | `number` | `null` | no |
 | name | Name of the backup vault to create. | `string` | `""` | no |
-| rule\_completion\_window | The amount of time AWS Backup attempts a backup before canceling the job and returning an error | `number` | `120` | no |
-| rule\_copy\_action\_destination\_vault | Configuration block(s) with copy operation settings | `map` | `{}` | no |
-| rule\_lifecycle\_cold\_storage\_after | Specifies the number of days after creation that a recovery point is moved to cold storage | `number` | `30` | no |
-| rule\_lifecycle\_delete\_after | Specifies the number of days after creation that a recovery point is deleted. Must be 90 days greater than `cold_storage_after` | `number` | `120` | no |
-| rule\_schedule | A CRON expression specifying when AWS Backup initiates a backup job | `string` | `null` | no |
-| rule\_start\_window | The amount of time in minutes before beginning a backup | `number` | `60` | no |
+| rule | List of backup rules | <pre>list(object({<br>    rule_name                    = string<br>    target_vault_name            = string<br>    schedule                     = string<br>    start_window                 = number<br>    completion_window            = number<br>    enable_continuous_backup    = bool<br>    lifecycle_cold_storage_after = number<br>    lifecycle_delete_after       = number<br>    lifecycle                    = object({<br>      cold_storage_after = number<br>      delete_after       = number<br>    })<br>  }))</pre> | <pre>[<br>  {<br>    "completion_window": 120,<br>    "enable_continuous_backup": true,<br>    "lifecycle": {<br>      "cold_storage_after": 30,<br>      "delete_after": 130<br>    },<br>    "lifecycle_cold_storage_after": 30,<br>    "lifecycle_delete_after": 130,<br>    "rule_name": "backup-rule",<br>    "schedule": "cron(15 * ? * * *)",<br>    "start_window": 60,<br>    "target_vault_name": "backup-vault"<br>  }<br>]</pre> | no |
 | selection\_resources | An array of strings that either contain Amazon Resource Names (ARNs) or match patterns of resources to assign to a backup plan | `list(any)` | `[]` | no |
 | selection\_tag\_key | The key in a key-value pair | `string` | `"Backup"` | no |
 | selection\_tag\_type | An operation, such as StringEquals, that is applied to a key-value pair used to filter resources in a selection | `string` | `"STRINGEQUALS"` | no |
