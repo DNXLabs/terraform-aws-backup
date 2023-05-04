@@ -10,6 +10,35 @@ module "backups" {
   selection_tag_key   = "Environment"
   selection_tag_value = "production"
 
-  rule_lifecycle_cold_storage_after = 30
-  rule_lifecycle_delete_after       = 60
+  enabled = true
+  vault_kms_key_arn = ""
+  # selection_resources = ["arn:aws:s3:::s3-test"]
+  rule = [{
+    rule_name         = "backup-rule"
+    target_vault_name = "backup-vault"
+    schedule          = "cron(15 * ? * * *)"
+    start_window      = 60
+    completion_window = 120
+    enable_continuous_backup = true
+    lifecycle_cold_storage_after = 30
+    lifecycle_delete_after = 35
+    lifecycle = {
+      cold_storage_after = 30
+      delete_after       = 35
+    }
+    },
+    {
+    rule_name         = "backup-test"
+    target_vault_name = "backup-vault-test"
+    schedule          = "cron(15 * ? * * *)"
+    start_window      = 60
+    completion_window = 120
+    enable_continuous_backup = false
+    lifecycle_cold_storage_after = 30
+    lifecycle_delete_after = 120
+    lifecycle = {
+      cold_storage_after = 30
+      delete_after       = 120
+    }
+    }]
 }
