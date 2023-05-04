@@ -82,7 +82,6 @@ resource "aws_backup_selection" "tag" {
   condition {}
 }
 
-
 # AWS Backup selection - resources arn
 resource "aws_backup_selection" "resources" {
   count        = length(var.selection_resources) > 0 && var.account_type == local.account_type.workload ? length(var.selection_resources) : 0
