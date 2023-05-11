@@ -175,11 +175,11 @@ type = list(object({
     start_window      = 60
     completion_window = 120
     enable_continuous_backup = true
-    lifecycle_cold_storage_after = 30
-    lifecycle_delete_after = 120
+    lifecycle_cold_storage_after = null
+    lifecycle_delete_after = 300
     lifecycle = {
-      cold_storage_after = 30
-      delete_after       = 120
+      cold_storage_after = null
+      delete_after       = 300
     }
   }]
 }
