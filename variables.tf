@@ -176,10 +176,16 @@ type = list(object({
     completion_window = 120
     enable_continuous_backup = true
     lifecycle_cold_storage_after = null
-    lifecycle_delete_after = 300
+    lifecycle_delete_after = 30
     lifecycle = {
       cold_storage_after = null
-      delete_after       = 300
+      delete_after       = 30
     }
   }]
+}
+
+variable "enabled" {
+  description = "Change to false to avoid deploying any AWS Backup resources"
+  type        = bool
+  default     = true
 }
