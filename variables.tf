@@ -109,11 +109,6 @@ variable "rule_lifecycle_delete_after" {
   default     = 120
 }
 
-variable "rule_copy_action_destination_vault" {
-  description = "Configuration block(s) with copy operation settings"
-  default     = {}
-}
-
 # Selection
 variable "selection_resources" {
   description = "An array of strings that either contain Amazon Resource Names (ARNs) or match patterns of resources to assign to a backup plan"
@@ -155,4 +150,42 @@ variable "changeable_for_days" {
   description = "The number of days before the lock date. Until that time, the configuration can be edited or removed. The minimum number of day is 3 days"
   type        = number
   default     = null
+}
+
+variable "rule" {
+  description = "List of backup rules"
+type = list(object({
+    rule_name                    = string
+    target_vault_name            = string
+    schedule                     = string
+    start_window                 = number
+    completion_window            = number
+    enable_continuous_backup    = bool
+    lifecycle_cold_storage_after = number
+    lifecycle_delete_after       = number
+    lifecycle                    = object({
+      cold_storage_after = number
+      delete_after       = number
+    })
+  }))
+  default = [{
+    rule_name         = "backup-rule"
+    target_vault_name = "backup-vault"
+    schedule          = null
+    start_window      = 60
+    completion_window = 120
+    enable_continuous_backup = true
+    lifecycle_cold_storage_after = null
+    lifecycle_delete_after = 30
+    lifecycle = {
+      cold_storage_after = null
+      delete_after       = 30
+    }
+  }]
+}
+
+variable "enabled" {
+  description = "Change to false to avoid deploying any AWS Backup resources"
+  type        = bool
+  default     = true
 }

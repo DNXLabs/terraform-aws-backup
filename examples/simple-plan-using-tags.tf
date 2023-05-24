@@ -1,15 +1,23 @@
 
 module "backups" {
   source = "git::https://github.com/DNXLabs/terraform-aws-backup?ref=1.0.2"
-
-  name          = "production-by-tags"
-  rule_schedule = "cron(0 12 * * ? *)" # 12:00pm UTC -> 10:00pm AEST (http://crontab.org/)
-
-  # Selection of resources by tag
-  # Supported resources Aurora, DynamoDB, EBS, EC2, FSx, EFS, RDS, Storage Gateway 
-  selection_tag_key   = "Environment"
-  selection_tag_value = "production"
-
-  rule_lifecycle_cold_storage_after = 30
-  rule_lifecycle_delete_after       = 60
+  # source = "./modules/backup"
+  enabled = local.workspace.backups.enabled
+  selection_tag_key   = local.workspace.backups.selection_tag_key
+  selection_tag_value = local.workspace.backups.selection_tag_value
+  for_each = { for rules in local.workspace.backups.rules : rules.rule_name => rules }
+  rule = {
+    rule_name         = local.workspace.backups.rule_name
+    target_vault_name = local.workspace.backups.target_vault_name
+    schedule          = local.workspace.backups.schedule
+    start_window      = local.workspace.backups.start_window
+    completion_window = local.workspace.backups.completion_window
+    enable_continuous_backup = local.workspace.backups.enable_continuous_backup
+    lifecycle_cold_storage_after = local.workspace.backups.lifecycle_cold_storage_after
+    lifecycle_delete_after = local.workspace.backups.lifecycle_delete_after
+    lifecycle = {
+      cold_storage_after = local.workspace.backups.lifecycle_cold_storage_after
+      delete_after       = local.workspace.backups.lifecycle_delete_after
+    }
+  }
 }

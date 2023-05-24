@@ -23,46 +23,52 @@ resource "aws_backup_vault_lock_configuration" "backup_vault_lock" {
 
 # AWS Backup plan
 resource "aws_backup_plan" "backup_plan" {
-  count = var.account_type == local.account_type.workload ? 1 : 0
+  count = var.enabled ? 1 : 0
+  name  = var.name
+  # Rules
+  dynamic "rule" {
+    for_each = var.rule
+    content {
+      rule_name                = rule.value.rule_name
+      target_vault_name        = aws_backup_vault.backup_vault.name
+      schedule                 = try(rule.value.schedule, null)
+      start_window             = try(rule.value.start_window, null)
+      completion_window        = try(rule.value.completion_window, null)
+      enable_continuous_backup = try(rule.value.enable_continuous_backup, null)
 
-  name = "plan-${var.name}-backup"
-  tags = {
-    Job = "${var.name}-backup"
-  }
+      # Lifecycle
+      dynamic "lifecycle" {
+        for_each = length(lookup(rule.value, "lifecycle", {})) == 0 ? [] : [lookup(rule.value, "lifecycle", {})]
+        content {
+          cold_storage_after = lookup(rule.value, "enable_continuous_backup", false) == true ? null : lookup(lifecycle.value, "cold_storage_after", 7)
+          delete_after       = try(lifecycle.value.delete_after, 35)
+        }
+      }
 
-  rule {
-    rule_name         = "rule-${var.name}-backup"
-    target_vault_name = aws_backup_vault.backup_vault.name
-    schedule          = var.rule_schedule
-    start_window      = var.rule_start_window
-    completion_window = var.rule_completion_window
+      # Copy action
+      dynamic "copy_action" {
+        for_each = lookup(rule.value, "copy_actions", [])
+        content {
+          destination_vault_arn = aws_backup_vault.backup_vault.arn
 
-    lifecycle {
-      cold_storage_after = var.rule_lifecycle_cold_storage_after
-      delete_after       = var.rule_lifecycle_delete_after
-    }
-    recovery_point_tags = {
-      Job = "${var.name}-backup"
-    }
-
-    dynamic "copy_action" {
-      for_each = var.rule_copy_action_destination_vault
-      content {
-        destination_vault_arn = copy_action.value.destination_vault_arn
-        lifecycle {
-          cold_storage_after = copy_action.value.cold_storage_after
-          delete_after       = copy_action.value.delete_after
+          # Copy Action Lifecycle
+          dynamic "lifecycle" {
+            for_each = length(lookup(copy_action.value, "lifecycle", {})) == 0 ? [] : [lookup(copy_action.value, "lifecycle", {})]
+            content {
+              cold_storage_after = lookup(rule.value, "enable_continuous_backup", false) == true ? null :  lookup(lifecycle.value, "cold_storage_after", 7)
+              delete_after       = try(lifecycle.value.delete_after, 35)
+            }
+          }
         }
       }
     }
   }
 }
-
 # AWS Backup selection - tag
-resource "aws_backup_selection" "backup_selection" {
-  count = var.account_type == local.account_type.workload ? 1 : 0
+resource "aws_backup_selection" "tag" {
+  count = length(var.selection_resources) == 0 && var.account_type == local.account_type.workload ? 1 : 0
 
-  name         = "selection-${var.name}-backup"
+  name         = "selection-${var.name}-backup-tag"
   iam_role_arn = aws_iam_role.backup_role[0].arn
 
   plan_id = aws_backup_plan.backup_plan[0].id
@@ -76,6 +82,15 @@ resource "aws_backup_selection" "backup_selection" {
   condition {}
 }
 
+# AWS Backup selection - resources arn
+resource "aws_backup_selection" "resources" {
+  count        = length(var.selection_resources) > 0 && var.account_type == local.account_type.workload ? length(var.selection_resources) : 0
+  name         = "selection-${element(split(":", var.selection_resources[count.index]), length(var.selection_resources[count.index]) - 1)}-backup-${count.index}"
+  iam_role_arn = aws_iam_role.backup_role[0].arn
+  plan_id      = aws_backup_plan.backup_plan[0].id
+  resources    = var.selection_resources
+}
+
 # AWS Backup vault notification
 resource "aws_backup_vault_notifications" "default" {
   count               = try(var.enable_aws_backup_vault_notifications, false) ? 1 : 0
@@ -83,3 +98,4 @@ resource "aws_backup_vault_notifications" "default" {
   sns_topic_arn       = var.vault_notification_sns_topic_arn
   backup_vault_events = var.backup_vault_events
 }
+
