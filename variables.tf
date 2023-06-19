@@ -4,7 +4,6 @@
 variable "name" {
   description = "Name of the backup vault to create."
   type        = string
-  default     = ""
 }
 
 variable "account_type" {
@@ -152,11 +151,10 @@ variable "changeable_for_days" {
   default     = null
 }
 
-variable "rule" {
+variable "rules" {
   description = "List of backup rules"
 type = list(object({
     rule_name                    = string
-    target_vault_name            = string
     schedule                     = string
     start_window                 = number
     completion_window            = number
@@ -170,7 +168,6 @@ type = list(object({
   }))
   default = [{
     rule_name         = "backup-rule"
-    target_vault_name = "backup-vault"
     schedule          = null
     start_window      = 60
     completion_window = 120
