@@ -1,9 +1,9 @@
 # AWS Backup vault
 resource "aws_backup_vault" "backup_vault" {
-  name        = "vault-${var.name}-backup"
+  name        = "${var.name}-vault"
   kms_key_arn = var.vault_kms_key_arn
   tags = {
-    Job = "${var.name}-backup"
+    Name = "${var.name}-vault"
   }
 }
 
@@ -68,7 +68,7 @@ resource "aws_backup_plan" "backup_plan" {
 resource "aws_backup_selection" "tag" {
   count = var.enabled ? length(var.selection_resources) == 0 && var.account_type == local.account_type.workload ? 1 : 0 : 0
 
-  name         = "selection-${var.name}-backup-tag"
+  name         = "${var.name}-backup-tag"
   iam_role_arn = aws_iam_role.backup_role[0].arn
 
   plan_id = aws_backup_plan.backup_plan[0].id
@@ -82,10 +82,11 @@ resource "aws_backup_selection" "tag" {
   condition {}
 }
 
+
 # AWS Backup selection - resources arn
 resource "aws_backup_selection" "resources" {
   count        = var.enabled ? length(var.selection_resources) > 0 && var.account_type == local.account_type.workload ? length(var.selection_resources) : 0 : 0
-  name         = "selection-${element(split(":", var.selection_resources[count.index]), length(var.selection_resources[count.index]) - 1)}-backup-${count.index}"
+  name         = "${element(split(":", var.selection_resources[count.index]), 2)}-${element(split(":", var.selection_resources[count.index]), length(var.selection_resources[count.index]))}-${count.index}"
   iam_role_arn = aws_iam_role.backup_role[0].arn
   plan_id      = aws_backup_plan.backup_plan[0].id
   resources    = var.selection_resources
