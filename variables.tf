@@ -155,9 +155,9 @@ variable "rules" {
   description = "List of backup rules"
 type = list(object({
     rule_name                    = string
-    schedule                     = string
-    start_window                 = number
-    completion_window            = number
+    schedule                     = optional(string)
+    start_window                 = optional(number, 60)
+    completion_window            = optional(number, 120)
     enable_continuous_backup     = optional(bool, false)
     lifecycle                    = optional(object({
       cold_storage_after = optional(number)
@@ -166,14 +166,6 @@ type = list(object({
   }))
   default = [{
     rule_name         = "backup-rule"
-    schedule          = null
-    start_window      = 60
-    completion_window = 120
-    # enable_continuous_backup = true
-    # lifecycle = {
-    #   cold_storage_after = null
-    #   delete_after       = 30
-    # }
   }]
 }
 
