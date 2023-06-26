@@ -4,7 +4,6 @@
 variable "name" {
   description = "Name of the backup vault to create."
   type        = string
-  default     = ""
 }
 
 variable "account_type" {
@@ -152,35 +151,21 @@ variable "changeable_for_days" {
   default     = null
 }
 
-variable "rule" {
+variable "rules" {
   description = "List of backup rules"
 type = list(object({
     rule_name                    = string
-    target_vault_name            = string
-    schedule                     = string
-    start_window                 = number
-    completion_window            = number
-    enable_continuous_backup    = bool
-    lifecycle_cold_storage_after = number
-    lifecycle_delete_after       = number
-    lifecycle                    = object({
-      cold_storage_after = number
-      delete_after       = number
-    })
+    schedule                     = optional(string)
+    start_window                 = optional(number, 60)
+    completion_window            = optional(number, 120)
+    enable_continuous_backup     = optional(bool, false)
+    lifecycle                    = optional(object({
+      cold_storage_after = optional(number)
+      delete_after       = optional(number, 30)
+    }))
   }))
   default = [{
     rule_name         = "backup-rule"
-    target_vault_name = "backup-vault"
-    schedule          = null
-    start_window      = 60
-    completion_window = 120
-    enable_continuous_backup = true
-    lifecycle_cold_storage_after = null
-    lifecycle_delete_after = 30
-    lifecycle = {
-      cold_storage_after = null
-      delete_after       = 30
-    }
   }]
 }
 
