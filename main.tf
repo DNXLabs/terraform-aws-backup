@@ -89,7 +89,7 @@ resource "aws_backup_selection" "resources" {
   name         = replace("${element(split(":", var.selection_resources[count.index]), 2)}-${element(split(":", var.selection_resources[count.index]), length(var.selection_resources[count.index]))}-${count.index}", "/", "-")
   iam_role_arn = aws_iam_role.backup_role[0].arn
   plan_id      = aws_backup_plan.backup_plan[0].id
-  resources    = var.selection_resources
+  resources    = [var.selection_resources[count.index]]
 }
 
 # AWS Backup vault notification
