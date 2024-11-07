@@ -1,4 +1,3 @@
-# AWS Backup vault
 resource "aws_backup_vault" "backup_vault" {
   name        = "${var.name}-vault"
   kms_key_arn = var.vault_kms_key_arn
