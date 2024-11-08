@@ -48,13 +48,13 @@ resource "aws_backup_plan" "backup_plan" {
       dynamic "copy_action" {
         for_each = lookup(rule.value, "copy_actions", [])
         content {
-          destination_vault_arn = try(copy_action.value.vault_arn, aws_backup_vault.backup_vault.arn)
+          destination_vault_arn = lookup(copy_action.value, "vault_arn", aws_backup_vault.backup_vault.arn)
 
           # Copy Action Lifecycle
           dynamic "lifecycle" {
             for_each = length(lookup(copy_action.value, "lifecycle", {})) == 0 ? [] : [lookup(copy_action.value, "lifecycle", {})]
             content {
-              cold_storage_after = lookup(rule.value, "enable_continuous_backup", false) == true ? null :  lookup(lifecycle.value, "cold_storage_after", 7)
+              cold_storage_after = lookup(rule.value, "enable_continuous_backup", false) == true ? null : lookup(lifecycle.value, "cold_storage_after", 7)
               delete_after       = try(lifecycle.value.delete_after, 35)
             }
           }
@@ -85,7 +85,7 @@ resource "aws_backup_selection" "tag" {
 # AWS Backup selection - resources arn
 resource "aws_backup_selection" "resources" {
   count        = var.enabled ? length(var.selection_resources) > 0 && var.account_type == local.account_type.workload ? length(var.selection_resources) : 0 : 0
-  name         = replace("${element(split(":", var.selection_resources[count.index]), 2)}-${element(split(":", var.selection_resources[count.index]), length(split(":",var.selection_resources[count.index]))-1)}-${count.index}", "/", "-")
+  name         = replace("${element(split(":", var.selection_resources[count.index]), 2)}-${element(split(":", var.selection_resources[count.index]), length(split(":", var.selection_resources[count.index])) - 1)}-${count.index}", "/", "-")
   iam_role_arn = aws_iam_role.backup_role[0].arn
   plan_id      = aws_backup_plan.backup_plan[0].id
   resources    = [var.selection_resources[count.index]]
