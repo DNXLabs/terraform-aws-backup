@@ -163,6 +163,13 @@ variable "rules" {
       cold_storage_after = optional(number)
       delete_after       = optional(number, 30)
     }))
+    copy_actions = optional(list(object({
+      destination_vault_arn = optional(string)
+      lifecycle = optional(object({
+        cold_storage_after = optional(number)
+        delete_after       = optional(number, 30)
+      }), {})
+    })), [])
   }))
   default = [{
     rule_name = "backup-rule"
