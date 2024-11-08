@@ -3,5 +3,5 @@ output "vault_arn" {
 }
 
 output "plan_id" {
-  value = aws_backup_plan.backup_plan.id
+  value = aws_backup_plan.backup_plan[0].id
 }
