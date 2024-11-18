@@ -1,4 +1,3 @@
-# AWS Backup vault
 resource "aws_backup_vault" "backup_vault" {
   name        = "${var.name}-vault"
   kms_key_arn = var.vault_kms_key_arn
@@ -48,7 +47,7 @@ resource "aws_backup_plan" "backup_plan" {
       dynamic "copy_action" {
         for_each = try(rule.value.copy_actions, [])
         content {
-          destination_vault_arn = aws_backup_vault.backup_vault.arn
+          destination_vault_arn = lookup(copy_action.value, "destination_vault_arn", aws_backup_vault.backup_vault.arn)
 
           # Copy Action Lifecycle
           dynamic "lifecycle" {
